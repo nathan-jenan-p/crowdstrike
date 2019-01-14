@@ -1,0 +1,76 @@
+<div>
+    {{#each details as |detail|}}
+    <div>
+        <a class="p-link" href="">View in Crowdstrike</a>
+        <div>
+            <span class="p-key">Severity</span>
+            <span class="p-value">{{detail.max_severity_displayname}}</span>
+        </div>
+        <div>
+            <span class="p-key">Status</span>
+            <span class="p-value">{{detail.status}}</span>
+        </div>
+
+        <h1 class="p-title">
+            Device
+        </h1>
+        <div>
+            <span class="p-key">Hostname</span>
+            <span class="p-value">{{detail.device.hostname}}</span>
+        </div>
+        <div>
+            <span class="p-key">External IP</span>
+            <span class="p-value">{{detail.device.external_ip}}</span>
+        </div>
+        <div>
+            <span class="p-key">OS Version</span>
+            <span class="p-value">{{detail.device.os_version}}</span>
+        </div>
+        <div>
+            <span class="p-key">System Product Name</span>
+            <span class="p-value">{{detail.device.system_product_name}}</span>
+        </div>
+        <div>
+            <span class="p-key">First Seen</span>
+            <span class="p-value">{{detail.device.first_seen}}</span>
+        </div>
+
+        <h1 class="p-title">
+            Behaviors
+        </h1>
+        {{#each detail.behaviors as |behavior|}}
+        <h2 class="p-title">
+            {{behavior.behavior_id}}
+        </h2>
+        <div>
+            <span class="p-key">Filename</span>
+            <span class="p-value">{{behavior.filename}}</span>
+        </div>
+        <div>
+            <span class="p-key">Tactic</span>
+            <span class="p-value">{{behavior.tactic}}</span>
+        </div>
+        <div>
+            <span class="p-key">Technique</span>
+            <span class="p-value">{{behavior.technique}}</span>
+        </div>
+        <div>
+            <span class="p-key">Objective</span>
+            <span class="p-value">{{behavior.objective}}</span>
+        </div>
+        <div>
+            <span class="p-key">Scenario</span>
+            <span class="p-value">{{behavior.scenario}}</span>
+        </div>
+        <div>
+            <span class="p-key">User Name</span>
+            <span class="p-value">{{behavior.user_name}}</span>
+        </div>
+        <div>
+            <span class="p-key">Timestamp</span>
+            <span class="p-value">{{behavior.timestamp}}</span>
+        </div>
+        {{/each}}
+    </div>
+    {{/each}}
+</div>
