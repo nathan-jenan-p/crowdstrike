@@ -1,7 +1,11 @@
 <div>
     {{#each details as |detail|}}
+    <h1 class="p-title">
+        {{detail.detection_id}}
+    </h1>
+
     <div>
-        <a class="p-link" href="">View in Crowdstrike</a>
+        <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a>
         <div>
             <span class="p-key">Severity</span>
             <span class="p-value">{{detail.max_severity_displayname}}</span>
@@ -9,6 +13,10 @@
         <div>
             <span class="p-key">Status</span>
             <span class="p-value">{{detail.status}}</span>
+        </div>
+        <div>
+            <span class="p-key">Assigned To</span>
+            <span class="p-value">{{detail.assigned_to_name}}</span>
         </div>
 
         <h1 class="p-title">
@@ -70,7 +78,9 @@
             <span class="p-key">Timestamp</span>
             <span class="p-value">{{behavior.timestamp}}</span>
         </div>
+        <br />
         {{/each}}
     </div>
     {{/each}}
+    <br />
 </div>

@@ -57,6 +57,22 @@ function searchDetects(token, entities, callback) {
     });
 }
 
+function dedup(array) {
+    let temp = {};
+
+    array.forEach(item => {
+        temp[item] = true;
+    });
+
+    let deduped = [];
+
+    for (let key in temp) {
+        deduped.push(key);
+    }
+
+    return deduped;
+}
+
 function getDetects(token, entitiesWithIds, callback) {
     Logger.trace('getting detects');
 
@@ -106,15 +122,19 @@ function getDetects(token, entitiesWithIds, callback) {
                 results.push({
                     entity: entityWithId.entity,
                     data: {
-                        summary: matchingResults
+                        summary: dedup(matchingResults
                             .map(result => {
                                 return [
                                     result.status,
                                     result.max_severity_displayname
                                 ]
                             })
-                            .reduce((prev, next) => prev.concat(next), []),
-                        details: matchingResults
+                            .reduce((prev, next) => prev.concat(next), [])),
+                        details: matchingResults.map(result => {
+                            let split = result.detection_id.split(':');
+                            result.__url = `https://falcon.crowdstrike.com/activity/detections/detail/${split[1]}/${split[2]}`;
+                            return result;
+                        })
                     }
                 });
             }

@@ -5,7 +5,7 @@ module.exports = {
      * @type String
      * @required
      */
-    name: "crowdstrike",
+    name: "CrowdStrike",
     /**
      * The acronym that appears in the notification window when information from this integration
      * is displayed.  Note that the acronym is included as part of each "tag" in the summary information
@@ -15,15 +15,15 @@ module.exports = {
      * @type String
      * @required
      */
-    acronym: "CS",
+    acronym: "CWDSTK",
     /**
      * Description for this integration which is displayed in the Polarity integrations user interface
      *
      * @type String
      * @optional
      */
-    description: "TODO crowdstrike integration description",
-    entityTypes: ['ip', 'hash'],
+    description: "CrowdStrike is the leader in next-generation endpoint protection, threat intelligence and incident response through cloud-based endpoint protection.",
+    entityTypes: ['*'],
     /**
      * An array of style files (css or less) that will be included for your integration. Any styles specified in
      * the below files can be used in your custom template.
@@ -71,7 +71,7 @@ module.exports = {
          * to STAXX servers without valid SSL certificates.  Please note that we do NOT recommending setting this
          * to false in a production environment.
          */
-        rejectUnauthorized: false
+        rejectUnauthorized: true
     },
     logging: {
         // directory is relative to the this integrations directory
@@ -82,7 +82,7 @@ module.exports = {
         // the directory you specify is writable by the `polarityd:polarityd` user and group.
 
         //directoryPath: '/var/log/polarity-integrations',
-        level: 'trace',  //trace, debug, info, warn, error, fatal
+        level: 'info',  //trace, debug, info, warn, error, fatal
     },
     /**
      * Options that are displayed to the user/admin in the Polarity integration user-interface.  Should be structured
