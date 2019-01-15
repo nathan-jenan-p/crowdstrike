@@ -92,7 +92,6 @@ module.exports = {
      * @optional
      */
     options: [
-
         {
             key: "id",
             name: "Client ID",

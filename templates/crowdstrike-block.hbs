@@ -1,11 +1,23 @@
 <div>
-    {{#each details as |detail|}}
+    {{#each results as |detail|}}
     <h1 class="p-title">
         {{detail.detection_id}}
     </h1>
 
+    <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a>
+
+    <br />
+
+    <button {{action "toggle" detail.detection_id}}>
+        {{#if detail.open}}
+        Hide
+        {{else}}
+        Show
+        {{/if}}
+    </button>
+
+    {{#if detail.open}}
     <div>
-        <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a>
         <div>
             <span class="p-key">Severity</span>
             <span class="p-value {{detail.max_severity_displayname}}">{{detail.max_severity_displayname}}</span>
@@ -81,6 +93,7 @@
         <br />
         {{/each}}
     </div>
+    {{/if}}
     {{/each}}
     <br />
 </div>

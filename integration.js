@@ -133,6 +133,7 @@ function getDetects(token, entitiesWithIds, callback) {
                         details: matchingResults.map(result => {
                             let split = result.detection_id.split(':');
                             result.__url = `https://falcon.crowdstrike.com/activity/detections/detail/${split[1]}/${split[2]}`;
+                            result.open = false;
                             return result;
                         })
                     }
