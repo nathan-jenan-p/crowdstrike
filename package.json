@@ -6,8 +6,9 @@
   "license": "MIT",
   "author": "Polarity",
   "dependencies": {
+    "async": "2.1.4",
     "request": "^2.75",
-    "async": "2.1.4"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "chai": "~3.5",

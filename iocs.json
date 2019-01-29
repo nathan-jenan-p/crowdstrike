@@ -1,0 +1,22 @@
+{
+    "meta": {
+        "query_time": 0.10,
+        "trace_id": "a4d3ba63-28e4-473e-9b6f-61dd0b8be4fe"
+    },
+    "resources": [
+        {
+            "type": "domain",
+            "value": "a-bad-domain.com",
+            "policy": "detect",
+            "source": "source",
+            "share_level": "red",
+            "expiration_timestamp": "2016-02-25T00:00:00Z",
+            "description": "description",
+            "created_timestamp": "2016-01-26T01:32:52Z",
+            "created_by": "test-user",
+            "modified_timestamp": "2016-01-26T01:32:52Z",
+            "modified_by": "test-user"
+        }
+    ],
+    "errors": []
+}

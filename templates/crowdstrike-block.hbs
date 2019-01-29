@@ -1,99 +1,290 @@
 <div>
     {{#each results as |detail|}}
-    <h1 class="p-title">
-        {{detail.detection_id}}
-    </h1>
-
-    <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a>
-
-    <br />
-
-    <button {{action "toggle" detail.detection_id}}>
-        {{#if detail.open}}
-        Hide
-        {{else}}
-        Show
-        {{/if}}
-    </button>
-
-    {{#if detail.open}}
+    {{#if detail.__isDetects}}
     <div>
-        <div>
-            <span class="p-key">Severity</span>
-            <span class="p-value {{detail.max_severity_displayname}}">{{detail.max_severity_displayname}}</span>
-        </div>
-        <div>
-            <span class="p-key">Status</span>
-            <span class="p-value">{{detail.status}}</span>
-        </div>
-        <div>
-            <span class="p-key">Assigned To</span>
-            <span class="p-value">{{detail.assigned_to_name}}</span>
-        </div>
-
         <h1 class="p-title">
-            Device
+            Detects:
+            {{detail.detection_id}}
         </h1>
-        <div>
-            <span class="p-key">Hostname</span>
-            <span class="p-value">{{detail.device.hostname}}</span>
-        </div>
-        <div>
-            <span class="p-key">External IP</span>
-            <span class="p-value">{{detail.device.external_ip}}</span>
-        </div>
-        <div>
-            <span class="p-key">OS Version</span>
-            <span class="p-value">{{detail.device.os_version}}</span>
-        </div>
-        <div>
-            <span class="p-key">System Product Name</span>
-            <span class="p-value">{{detail.device.system_product_name}}</span>
-        </div>
-        <div>
-            <span class="p-key">First Seen</span>
-            <span class="p-value">{{detail.device.first_seen}}</span>
-        </div>
 
-        <h1 class="p-title">
-            Behaviors
-        </h1>
-        {{#each detail.behaviors as |behavior|}}
-        <h2 class="p-title">
-            {{behavior.behavior_id}}
-        </h2>
-        <div>
-            <span class="p-key">Filename</span>
-            <span class="p-value">{{behavior.filename}}</span>
-        </div>
-        <div>
-            <span class="p-key">Tactic</span>
-            <span class="p-value">{{behavior.tactic}}</span>
-        </div>
-        <div>
-            <span class="p-key">Technique</span>
-            <span class="p-value">{{behavior.technique}}</span>
-        </div>
-        <div>
-            <span class="p-key">Objective</span>
-            <span class="p-value">{{behavior.objective}}</span>
-        </div>
-        <div>
-            <span class="p-key">Scenario</span>
-            <span class="p-value">{{behavior.scenario}}</span>
-        </div>
-        <div>
-            <span class="p-key">User Name</span>
-            <span class="p-value">{{behavior.user_name}}</span>
-        </div>
-        <div>
-            <span class="p-key">Timestamp</span>
-            <span class="p-value">{{behavior.timestamp}}</span>
-        </div>
+        <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a>
+
         <br />
-        {{/each}}
+
+        <button {{action "toggle" detail.__id}}>
+            {{#if detail.open}}
+            Hide
+            {{else}}
+            Show
+            {{/if}}
+        </button>
+
+        {{#if detail.open}}
+        <div>
+            <div>
+                <span class="p-key">Severity</span>
+                <span class="p-value {{detail.max_severity_displayname}}">{{detail.max_severity_displayname}}</span>
+            </div>
+            <div>
+                <span class="p-key">Status</span>
+                <span class="p-value">{{detail.status}}</span>
+            </div>
+            <div>
+                <span class="p-key">Assigned To</span>
+                <span class="p-value">{{detail.assigned_to_name}}</span>
+            </div>
+
+            <h1 class="p-title">
+                Device
+            </h1>
+            <div>
+                <span class="p-key">Hostname</span>
+                <span class="p-value">{{detail.device.hostname}}</span>
+            </div>
+            <div>
+                <span class="p-key">External IP</span>
+                <span class="p-value">{{detail.device.external_ip}}</span>
+            </div>
+            <div>
+                <span class="p-key">OS Version</span>
+                <span class="p-value">{{detail.device.os_version}}</span>
+            </div>
+            <div>
+                <span class="p-key">System Product Name</span>
+                <span class="p-value">{{detail.device.system_product_name}}</span>
+            </div>
+            <div>
+                <span class="p-key">First Seen</span>
+                <span class="p-value">{{detail.device.first_seen}}</span>
+            </div>
+
+            <h1 class="p-title">
+                Behaviors
+            </h1>
+            {{#each detail.behaviors as |behavior|}}
+            <h2 class="p-title">
+                {{behavior.behavior_id}}
+            </h2>
+            <div>
+                <span class="p-key">Filename</span>
+                <span class="p-value">{{behavior.filename}}</span>
+            </div>
+            <div>
+                <span class="p-key">Tactic</span>
+                <span class="p-value">{{behavior.tactic}}</span>
+            </div>
+            <div>
+                <span class="p-key">Technique</span>
+                <span class="p-value">{{behavior.technique}}</span>
+            </div>
+            <div>
+                <span class="p-key">Objective</span>
+                <span class="p-value">{{behavior.objective}}</span>
+            </div>
+            <div>
+                <span class="p-key">Scenario</span>
+                <span class="p-value">{{behavior.scenario}}</span>
+            </div>
+            <div>
+                <span class="p-key">User Name</span>
+                <span class="p-value">{{behavior.user_name}}</span>
+            </div>
+            <div>
+                <span class="p-key">Timestamp</span>
+                <span class="p-value">{{behavior.timestamp}}</span>
+            </div>
+            <br />
+            {{/each}}
+        </div>
+        {{/if}}
     </div>
     {{/if}}
-    {{/each}}
+    {{#if detail.__isIocs}}
+    <div>
+        <h1 class="p-title">
+            IOCs:
+            {{detail.value}}
+        </h1>
+
+        <!-- TODO figure out the link format for IOC -->
+        <!-- <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a> -->
+
+        <br />
+
+        <button {{action "toggle" detail.__id}}>
+            {{#if detail.open}}
+            Hide
+            {{else}}
+            Show
+            {{/if}}
+        </button>
+
+        {{#if detail.open}}
+        <div>
+            <div>
+                <span class="p-key">Type</span>
+                <span class="p-value">{{detail.type}}</span>
+            </div>
+            <div>
+                <span class="p-key">Policy</span>
+                <span class="p-value">{{detail.policy}}</span>
+            </div>
+            <div>
+                <span class="p-key">Source</span>
+                <span class="p-value">{{detail.source}}</span>
+            </div>
+            <div>
+                <span class="p-key">Share Level</span>
+                <span class="p-value">{{detail.share_level}}</span>
+            </div>
+            <div>
+                <span class="p-key">Description</span>
+                <span class="p-value">{{detail.description}}</span>
+            </div>
+            <div>
+                <span class="p-key">Created By</span>
+                <span class="p-value">{{detail.created_by}}</span>
+            </div>
+            <div>
+                <span class="p-key">Created Timestamp</span>
+                <span class="p-value">{{detail.created_timestamp}}</span>
+            </div>
+            <div>
+                <span class="p-key">Modified By</span>
+                <span class="p-value">{{detail.modified_by}}</span>
+            </div>
+            <div>
+                <span class="p-key">Modified Timestamp</span>
+                <span class="p-value">{{detail.modified_timestamp}}</span>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
+    {{#if detail.__isDevice}}
+    <div>
+        <h1 class="p-title">
+            Device: 
+            {{detail.device_id}}
+        </h1>
+
+        <!-- TODO figure out the link format for IOC -->
+        <!-- <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a> -->
+
+        <br />
+
+        <button {{action "toggle" detail.__id}}>
+            {{#if detail.open}}
+            Hide
+            {{else}}
+            Show
+            {{/if}}
+        </button>
+
+        {{#if detail.open}}
+        <div>
+            <div>
+                <span class="p-key">CID</span>
+                <span class="p-value">{{detail.cid}}</span>
+            </div>
+            <div>
+                <span class="p-key">Hostname</span>
+                <span class="p-value">{{detail.hostname}}</span>
+            </div>
+            <div>
+                <span class="p-key">External IP</span>
+                <span class="p-value">{{detail.external_ip}}</span>
+            </div>
+            <div>
+                <span class="p-key">MAC Address</span>
+                <span class="p-value">{{detail.mac_address}}</span>
+            </div>
+            <div>
+                <span class="p-key">OS Version</span>
+                <span class="p-value">{{detail.os_version}}</span>
+            </div>
+            <div>
+                <span class="p-key">Status</span>
+                <span class="p-value">{{detail.status}}</span>
+            </div>
+            <div>
+                <span class="p-key">Site Name</span>
+                <span class="p-value">{{detail.site_name}}</span>
+            </div>
+            <div>
+                <span class="p-key">Manufacturer</span>
+                <span class="p-value">{{detail.system_manufacturer}}</span>
+            </div>
+            <div>
+                <span class="p-key">Product Name</span>
+                <span class="p-value">{{detail.system_product_name}}</span>
+            </div>
+
+            <h1 class="p-title">
+                Policies
+            </h1>
+            {{#each detail.policies as |policy|}}
+            <div>
+                <div>
+                    <span class="p-key">Type</span>
+                    <span class="p-value">{{policy.policy_type}}</span>
+                </div>
+                <div>
+                    <span class="p-key">ID</span>
+                    <span class="p-value">{{policy.policy_id}}</span>
+                </div>
+                <div>
+                    <span class="p-key">Hash</span>
+                    <span class="p-value">{{policy.settings_hash}}</span>
+                </div>
+                <div>
+                    <span class="p-key">Is Applied</span>
+                    <span class="p-value">{{policy.applied}}</span>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
+    {{#if detail.__isDeviceCount}}
+    <div>
+        <h1 class="p-title">
+            Device Count: 
+            {{detail.id}}
+        </h1>
+
+        <!-- TODO figure out the link format for IOC -->
+        <!-- <a class="p-link" href="{{detail.__url}}">View in Crowdstrike</a> -->
+
+        <br />
+
+        <button {{action "toggle" detail.__id}}>
+            {{#if detail.open}}
+            Hide
+            {{else}}
+            Show
+            {{/if}}
+        </button>
+
+        {{#if detail.open}}
+        <div>
+            <div>
+                <span class="p-key">Type</span>
+                <span class="p-value">{{detail.type}}</span>
+            </div>
+            <div>
+                <span class="p-key">Value</span>
+                <span class="p-value">{{detail.value}}</span>
+            </div>
+            <div>
+                <span class="p-key">Count</span>
+                <span class="p-value">{{detail.device_count}}</span>
+            </div>
+        </div>
+        {{/if}}
+    </div>
+    {{/if}}
     <br />
+    {{/each}}
 </div>

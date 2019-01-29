@@ -1,0 +1,15 @@
+{
+    "meta": {
+        "query_time": 0.041169611,
+        "trace_id": "7e2c0465-81ce-41b0-b87f-1a2ffb96f65c"
+    },
+    "resources": [
+        {
+            "id": "domain:evildomain.com",
+            "type": "domain",
+            "value": "evildomain.com",
+            "device_count": 13
+        }
+    ],
+    "errors": []
+}

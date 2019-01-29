@@ -1,0 +1,72 @@
+{
+    "meta": {
+        "query_time": 0.017458709,
+        "powered_by": "device-api",
+        "trace_id": "7aea2f44-9891-4892-b633-bf0544830e55"
+    },
+    "resources": [
+        {
+            "device_id": "8562fe0f4ce845347a85da0e5bf9623d",
+            "cid": "aaabbbdddcccddd",
+            "agent_load_flags": "1",
+            "agent_local_time": "2017-09-15T06:13:15.223Z",
+            "agent_version": "3.5.5606.0",
+            "bios_manufacturer": "Phoenix Technologies LTD",
+            "bios_version": "6.00",
+            "config_id_base": "65994753",
+            "config_id_build": "5606",
+            "config_id_platform": "3",
+            "external_ip": "24.16.20.181",
+            "mac_address": "00-50-56-8c-17-81",
+            "hostname": "TESTMACHINE",
+            "first_seen": "2017-07-19T02:08:24Z",
+            "last_seen": "2017-09-25T23:45:55Z",
+            "local_ip": "172.16.20.30",
+            "machine_domain": "hello.info",
+            "major_version": "6",
+            "minor_version": "1",
+            "os_version": "Windows 7",
+            "platform_id": "0",
+            "platform_name": "Windows",
+            "policies": [
+                {
+                    "policy_type": "prevention",
+                    "policy_id": "aaabbbdddcccddd",
+                    "applied": true,
+                    "settings_hash": "ed4a7460",
+                    "assigned_date": "2017-09-14T13:03:33.038805882Z",
+                    "applied_date": "2017-09-14T13:03:45.823683755Z"
+                }
+            ],
+            "device_policies": {
+                "prevention": {
+                    "policy_type": "prevention",
+                    "policy_id": "aaabbbdddcccddd",
+                    "applied": true,
+                    "settings_hash": "ed4a7460",
+                    "assigned_date": "2017-09-14T13:03:33.038805882Z",
+                    "applied_date": "2017-09-14T13:03:45.823683755Z"
+                },
+                "sensor_update": {
+                    "policy_type": "sensor-update",
+                    "policy_id": "aaabbbdddcccddd",
+                    "applied": true,
+                    "settings_hash": "65994753|3|2|automatic",
+                    "assigned_date": "2017-09-14T05:15:40.878196578Z",
+                    "applied_date": "2017-09-14T05:16:20.847887649Z"
+                }
+            },
+            "product_type": "1",
+            "product_type_desc": "Workstation",
+            "site_name": "Default-First-Site-Name",
+            "status": "normal",
+            "system_manufacturer": "VMware, Inc.",
+            "system_product_name": "VMware Virtual Platform",
+            "modified_timestamp": "2017-09-25T23:46:06Z",
+            "meta": {
+                "version": "49662"
+            }
+        }
+    ],
+    "errors": []
+}

@@ -2,6 +2,13 @@ let async = require('async');
 let config = require('./config/config');
 let request = require('request');
 
+let detects = require('./detects');
+let devices = require('./devices');
+let deviceCount = require('./deviceCount');
+let iocs = require('./iocs');
+
+let uuid = require('uuid/v4');
+
 let Logger;
 let requestWithDefaults;
 let requestOptions = {};
@@ -19,41 +26,32 @@ function handleRequestError(request) {
     };
 }
 
-function searchDetects(token, entities, callback) {
+function searchDetects(token, entity, callback) {
     Logger.trace('searching detects');
 
-    let entitiesWithIds = [];
-
-    async.forEach(entities, (entity, done) => {
-        requestWithDefaults({
-            uri: 'https://api.crowdstrike.com/detects/queries/detects/v1',
-            headers: {
-                'authorization': 'bearer ' + token
-            },
-            qs: {
-                q: entity.value
-            },
-            json: true,
-            method: 'GET'
-        }, 200, (err, body) => {
-            if (err) {
-                done(err);
-                return;
-            }
-
-            entitiesWithIds.push({
-                entity: entity,
-                ids: body.resources
-            });
-            done(null);
-        });
-    }, err => {
+    requestWithDefaults({
+        uri: 'https://api.crowdstrike.com/detects/queries/detects/v1',
+        headers: {
+            'authorization': 'bearer ' + token
+        },
+        qs: {
+            q: entity.value
+        },
+        json: true,
+        method: 'GET'
+    }, 200, (err, body) => {
         if (err) {
             callback(err);
             return;
         }
 
-        callback(null, entitiesWithIds);
+        callback(null, {
+            entity: entity,
+            ids: body.resources.map(resource => {
+                resource.__polarityType = 'detect';
+                return resource;
+            })
+        });
     });
 }
 
@@ -73,24 +71,15 @@ function dedup(array) {
     return deduped;
 }
 
-function getDetects(token, entitiesWithIds, callback) {
+function getDetects(token, entityWithIds, callback) {
     Logger.trace('getting detects');
 
     let results = [];
 
-    let allIds = entitiesWithIds
-        .map(entity => entity.ids)
-        .reduce((previous, next) => previous.concat(next), []);
+    let ids = entityWithIds.ids;
 
-    if (allIds.length === 0) {
-        entitiesWithIds.forEach(entityWithId => {
-            results.push({
-                entity: entityWithId.entity,
-                data: null
-            });
-        });
-
-        callback(null, results);
+    if (ids.length === 0) {
+        callback(null, null);
         return;
     }
 
@@ -100,7 +89,7 @@ function getDetects(token, entitiesWithIds, callback) {
             'authorization': 'bearer ' + token
         },
         body: {
-            ids: allIds
+            ids: ids
         },
         json: true,
         method: 'POST'
@@ -110,36 +99,22 @@ function getDetects(token, entitiesWithIds, callback) {
             return;
         }
 
-        entitiesWithIds.forEach(entityWithId => {
-            let matchingResults = body.resources.filter(resource => entityWithId.ids.includes(resource.detection_id));
+        let matchingResults = body.resources.filter(resource => entityWithIds.ids.includes(resource.detection_id));
 
-            if (matchingResults.length === 0) {
-                results.push({
-                    entity: entityWithId.entity,
-                    data: null
-                });
-            } else {
-                results.push({
-                    entity: entityWithId.entity,
-                    data: {
-                        summary: dedup(matchingResults
-                            .map(result => {
-                                return [
-                                    result.status,
-                                    result.max_severity_displayname
-                                ]
-                            })
-                            .reduce((prev, next) => prev.concat(next), [])),
-                        details: matchingResults.map(result => {
-                            let split = result.detection_id.split(':');
-                            result.__url = `https://falcon.crowdstrike.com/activity/detections/detail/${split[1]}/${split[2]}`;
-                            result.open = false;
-                            return result;
-                        })
-                    }
-                });
-            }
-        });
+        if (matchingResults.length === 0) {
+            results.push({
+                entity: entityWithId.entity,
+                data: null
+            });
+        } else {
+            results.push(matchingResults.map(result => {
+                let split = result.detection_id.split(':');
+                result.__url = `https://falcon.crowdstrike.com/activity/detections/detail/${split[1]}/${split[2]}`;
+                result.open = false;
+                result.__id = uuid();
+                return result;
+            }));
+        }
 
         callback(null, results);
     });
@@ -147,6 +122,11 @@ function getDetects(token, entitiesWithIds, callback) {
 
 function generateAccessToken(options, callback) {
     Logger.trace('generating access token');
+
+    if (options.fakeData) {
+        callback(null, 'fake token');
+        return;
+    }
 
     requestWithDefaults({
         uri: 'https://api.crowdstrike.com/oauth2/token',
@@ -166,8 +146,175 @@ function generateAccessToken(options, callback) {
     });
 }
 
+function lookupDetects(token, entity, options) {
+    return (callback) => {
+        if (options.fakeData) {
+            callback(null, detects.resources.map(resource => {
+                resource.__isDetects = true;
+                resource.open = false;
+                resource.__id = uuid();
+                return resource;
+            }));
+        } else {
+            searchDetects(token, entity, (err, entityWithIds) => {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+
+                getDetects(token, entityWithIds, (err, results) => {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+
+                    callback(null, results);
+                });
+            });
+        }
+    }
+}
+
+function lookupDevices(token, entity, options) {
+    return (callback) => {
+        if (options.fakeData) {
+            callback(null, devices.resources.map(resource => {
+                resource.__isDevice = true;
+                resource.open = false;
+                resource.__id = uuid();
+                return resource;
+            }));
+        } else {
+            if (entity.isIP || entity.isDomain || entity.isHash) {
+                requestWithDefaults({
+                    uri: 'https://falconapi.crowdstrike.com/devices/queries/devices/v1',
+                    headers: {
+                        'authorization': 'bearer ' + token
+                    },
+                    qs: {
+                        q: entity.value
+                    },
+                    json: true,
+                    method: 'GET'
+                }, 200, (err, body) => {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+
+                    // TODO when I get crowdstrike access see if this can be done in 1 request
+                    let results = [];
+                    async.each(body.resources, (id, done) => {
+                        requestWithDefaults({
+                            uri: 'https://falconapi.crowdstrike.com/devices/entities/devices/v1',
+                            headers: {
+                                'authorization': 'bearer ' + token
+                            },
+                            qs: {
+                                ids: id
+                            },
+                            json: true,
+                            method: 'GET'
+                        }, 200, (err, body) => {
+                            if (err) {
+                                callback(err);
+                                return;
+                            }
+
+                            results = results.concat(body.resources);
+                            done();
+                        });
+                    }, err => {
+                        callback(err, results);
+                    });
+                });
+            } else {
+                callback(null, null);
+                return;
+            }
+        }
+    };
+}
+
+function lookupDeviceCount(token, entity, options) {
+    return (callback) => {
+        if (options.fakeData) {
+            callback(null, deviceCount.resources.map(resource => {
+                resource.__isDeviceCount = true;
+                resource.open = false;
+                resource.__id = uuid();
+                return resource;
+            }));
+        } else {
+            if (entity.isIP || entity.isDomain || entity.isHash) {
+                requestWithDefaults({
+                    uri: 'https://falconapi.crowdstrike.com/indicators/aggregates/devices-count/v1',
+                    headers: {
+                        'authorization': 'bearer ' + token
+                    },
+                    qs: {
+                        type: entity.type.toLowerCase(),
+                        value: entity.value
+                    },
+                    json: true,
+                    method: 'GET'
+                }, 200, (err, body) => {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+
+                    callback(null, body.resources);
+                });
+            } else {
+                callback(null, null);
+                return;
+            }
+        }
+    };
+}
+
+function lookupIocs(token, entity, options) {
+    // TODO implement this
+    return (callback) => {
+        if (options.fakeData) {
+            callback(null, iocs.resources.map(resource => {
+                resource.__isIocs = true;
+                resource.open = false;
+                resource.__id = uuid();
+                return resource;
+            }));
+        } else {
+            if (entity.isIP || entity.isDomain || entity.isHash) {
+                requestWithDefaults({
+                    uri: 'https://falconapi.crowdstrike.com/indicators/entities/iocs/v1',
+                    headers: {
+                        'authorization': 'bearer ' + token
+                    },
+                    qs: {
+                        ids: `${entity.type.toLowerCase()}:${entity.value}`
+                    },
+                    json: true,
+                    method: 'GET'
+                }, 200, (err, body) => {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+
+                    callback(null, body.resource);
+                });
+            } else {
+                callback(null, null);
+                return;
+            }
+        }
+    };
+}
+
 function doLookup(entities, options, callback) {
     Logger.trace('starting lookup');
+    Logger.trace('options', options);
 
     let results = [];
 
@@ -177,22 +324,47 @@ function doLookup(entities, options, callback) {
             return;
         }
 
-        searchDetects(token, entities, (err, entitiesWithIds) => {
-            if (err) {
-                callback(err);
-                return;
-            }
+        async.each(entities, (entity, callback) => {
+            async.parallel(
+                [
+                    lookupDetects(token, entity, options),
+                    lookupDevices(token, entity, options),
+                    lookupDeviceCount(token, entity, options),
+                    lookupIocs(token, entity, options)
+                ],
+                (err, lookups) => {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
 
-            getDetects(token, entitiesWithIds, (err, results) => {
-                if (err) {
-                    callback(err);
-                    return;
-                }
+                    lookups = lookups.filter(lookup => !!lookup);
+                    if (lookups.length === 0) {
+                        callback(null, {
+                            entity: entity,
+                            data: null
+                        });
+                        return;
+                    }
 
-                Logger.trace('sending results to client', { results: results });
+                    lookups = lookups.reduce((prev, next) => prev.concat(next), []);
 
-                callback(null, results);
-            });
+                    Logger.trace('lookups', lookups);
+
+                    results.push({
+                        entity: entity,
+                        data: {
+                            summary: [],
+                            details: lookups
+                        }
+                    });
+
+                    callback(null);
+                });
+        }, err => {
+            Logger.trace('sending results to client', { results: results });
+
+            callback(err, results);
         });
     });
 }

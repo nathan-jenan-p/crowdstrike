@@ -1,0 +1,88 @@
+{
+    "meta": {
+        "query_time": 0.002420999,
+        "powered_by": "msa-api",
+        "trace_id": "2b97520e-b340-4978-97a2-71d97d5e5b21"
+    },
+    "resources": [
+        {
+            "cid": "5ddb0407bef249c19c7a975f17979a1f",
+            "detection_id": "ldt:aaabbbcccdddd:aaabbbcccdddd",
+            "device": {
+                "device_id": "aaabbbcccdddd",
+                "cid": "aaabbbcccdddd",
+                "agent_load_flags": "0",
+                "agent_local_time": "2017-09-07T13:19:20.642Z",
+                "agent_version": "3.5.5606.0",
+                "bios_manufacturer": "Phoenix Technologies LTD",
+                "bios_version": "6.00",
+                "config_id_base": "65994753",
+                "config_id_build": "5606",
+                "config_id_platform": "3",
+                "external_ip": "73.151.93.253",
+                "hostname": "TEST",
+                "first_seen": "2017-08-16T22:41:12Z",
+                "last_seen": "2017-09-07T18:55:12Z",
+                "local_ip": "192.168.186.139",
+                "mac_address": "00-0c-29-3e-95-ac",
+                "major_version": "6",
+                "minor_version": "1",
+                "os_version": "Windows 7",
+                "platform_id": "0",
+                "platform_name": "Windows",
+                "product_type": "1",
+                "product_type_desc": "Workstation",
+                "status": "contained",
+                "system_manufacturer": "VMware, Inc.",
+                "system_product_name": "VMware Virtual Platform",
+                "modified_timestamp": "2017-09-07T18:55:25Z"
+            },
+            "behaviors": [
+                {
+                    "device_id": "aaabbbcccdddd",
+                    "timestamp": "2017-09-07T20:01:00Z",
+                    "behavior_id": "10106",
+                    "filename": "powershell.exe",
+                    "alleged_filetype": "exe",
+                    "cmdline": "powershell -ExecutionPolicy Bypass -encodedCommand SQBFAFgAIAAoAE4AZQB3AC0ATwBiAGoAZQBjAHQAIABOAGUA==",
+                    "scenario": "credential_theft",
+                    "severity": 90,
+                    "confidence": 80,
+                    "ioc_type": "",
+                    "ioc_value": "",
+                    "ioc_source": "",
+                    "ioc_description": "",
+                    "user_name": "TEST",
+                    "user_id": "S-1-5-18",
+                    "control_graph_id": "ctg:d0836e182ecc49c07c2d40655af5b4ce:17182793345",
+                    "triggering_process_graph_id": "pid:d0836e182ecc49c07c2d40655af5b4ce:17567034510",
+                    "sha256": "a8fdba9df15e41b6f5c69c79f66a26a9d48e174f9e7018a371600b866867dab8",
+                    "md5": "852d67a27e454bd389fa7f02a8cbe23f",
+                    "parent_details": {
+                        "parent_sha256": "db06c3534964e3fc79d2763144ba53742d7fa250ca336f4a0fe724b75aaff386",
+                        "parent_md5": "5746bd7e255dd6a8afa06f7c42c1ba41",
+                        "parent_cmdline": "\"C:\\Windows\\system32\\cmd.exe\" ",
+                        "parent_process_graph_id": "pid:d0836e182ecc49c07c2d40655af5b4ce:17354654389"
+                    },
+                    "pattern_disposition": 282
+                }
+            ],
+            "email_sent": false,
+            "first_behavior": "2017-09-07T18:55:49Z",
+            "last_behavior": "2017-09-07T20:06:36Z",
+            "max_confidence": 90,
+            "max_severity": 90,
+            "max_severity_displayname": "Critical",
+            "show_in_ui": true,
+            "status": "new",
+            "adversary_ids": null,
+            "hostinfo": {
+                "active_directory_dn_display": null,
+                "domain": ""
+            },
+            "seconds_to_triaged": 0,
+            "seconds_to_resolved": 0
+        }
+    ],
+    "errors": []
+}

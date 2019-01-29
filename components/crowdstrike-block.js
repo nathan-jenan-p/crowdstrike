@@ -14,7 +14,7 @@ polarity.export = PolarityComponent.extend({
             results = JSON.parse(JSON.stringify(results));
 
             results.forEach(result => {
-                if (result.detection_id === key) {
+                if (result.__id === key) {
                     console.error('found item to toggle, now ' + !result.open);
                     result.open = !result.open;
                 }
