@@ -95,7 +95,7 @@ module.exports = {
         {
             key: "id",
             name: "Client ID",
-            description: "example description of this option",
+            description: "The Client ID to use to connect to Crowdstrike.",
             default: "",
             type: "text",
             userCanEdit: false,
@@ -104,7 +104,7 @@ module.exports = {
         {
             key: "secret",
             name: "Client Secret",
-            description: "example description of this option",
+            description: "The secret associated with the Client ID.",
             default: "",
             type: "password",
             userCanEdit: false,
@@ -113,8 +113,44 @@ module.exports = {
         {
             key: "fakeData",
             name: "Fake Data",
-            description: "Show example data without connecting to Crowdstrike",
+            description: "Show example data without connecting to Crowdstrike.",
             default: false,
+            type: "boolean",
+            userCanEdit: false,
+            adminOnly: true
+        },
+        {
+            key: "lookupDetects",
+            name: "Lookup Detects",
+            description: "Lookup detects when an entity is matched by Polarity.",
+            default: true,
+            type: "boolean",
+            userCanEdit: false,
+            adminOnly: true
+        },
+        {
+            key: "lookupDevices",
+            name: "Lookup Devices",
+            description: "Lookup devices when an entity is matched by Polarity. WARNING: This operation can be expensive and make a lot of API calls so it is disabled by default.",
+            default: false,
+            type: "boolean",
+            userCanEdit: false,
+            adminOnly: true
+        },
+        {
+            key: "lookupDeviceCount",
+            name: "Lookup Device Count",
+            description: "Lookup device count when an entity is matched by Polarity.",
+            default: true,
+            type: "boolean",
+            userCanEdit: false,
+            adminOnly: true
+        },
+        {
+            key: "lookupIocs",
+            name: "Lookup IOCs",
+            description: "Lookup IOCs when an entity is matched by Polarity",
+            default: true,
             type: "boolean",
             userCanEdit: false,
             adminOnly: true

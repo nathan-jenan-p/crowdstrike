@@ -148,6 +148,11 @@ function generateAccessToken(options, callback) {
 
 function lookupDetects(token, entity, options) {
     return (callback) => {
+        if (!options.lookupDetects) {
+            callback();
+            return;
+        }
+
         if (options.fakeData) {
             callback(null, detects.resources.map(resource => {
                 resource.__isDetects = true;
@@ -177,6 +182,11 @@ function lookupDetects(token, entity, options) {
 
 function lookupDevices(token, entity, options) {
     return (callback) => {
+        if (!options.lookupDevices) {
+            callback();
+            return;
+        }
+
         if (options.fakeData) {
             callback(null, devices.resources.map(resource => {
                 resource.__isDevice = true;
@@ -238,6 +248,11 @@ function lookupDevices(token, entity, options) {
 
 function lookupDeviceCount(token, entity, options) {
     return (callback) => {
+        if (!options.lookupDeviceCount) {
+            callback();
+            return;
+        }
+
         if (options.fakeData) {
             callback(null, deviceCount.resources.map(resource => {
                 resource.__isDeviceCount = true;
@@ -275,8 +290,12 @@ function lookupDeviceCount(token, entity, options) {
 }
 
 function lookupIocs(token, entity, options) {
-    // TODO implement this
     return (callback) => {
+        if (!options.lookupIocs) {
+            callback();
+            return;
+        }
+
         if (options.fakeData) {
             callback(null, iocs.resources.map(resource => {
                 resource.__isIocs = true;
