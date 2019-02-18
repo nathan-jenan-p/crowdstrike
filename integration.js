@@ -331,6 +331,10 @@ function lookupIocs(token, entity, options) {
     };
 }
 
+function flattenArray(array) {
+    return array.reduce((prev, next) => prev.concat(next), []);
+}
+
 function doLookup(entities, options, callback) {
     Logger.trace('starting lookup');
     Logger.trace('options', options);
@@ -366,14 +370,41 @@ function doLookup(entities, options, callback) {
                         return;
                     }
 
-                    lookups = lookups.reduce((prev, next) => prev.concat(next), []);
+                    lookups = flattenArray(lookups);
 
                     Logger.trace('lookups', lookups);
+
+                    let tags = flattenArray(lookups.map(lookup => {
+                        if (lookup.__isDetects) {
+                            return [
+                                lookup.status,
+                                lookup.max_severity_displayname
+                            ];
+                        } else if (lookup.__isDevice) {
+                            return [
+                                lookup.platform_name,
+                                lookup.status
+                            ];
+                        } else if (lookup.__isDeviceCount) {
+                            return [
+                                `Device Count: ${lookup.device_count}`
+                            ];
+                        } else if (lookup.__isIocs) {
+                            return [
+                                lookup.share_level,
+                                lookup.policy
+                            ];
+                        } else {
+                            // this case is for when new lookups are added but
+                            // there are no tags or the developer forgets
+                            return [];
+                        }
+                    }));
 
                     results.push({
                         entity: entity,
                         data: {
-                            summary: [],
+                            summary: tags,
                             details: lookups
                         }
                     });
